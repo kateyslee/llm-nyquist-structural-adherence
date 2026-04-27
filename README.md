@@ -120,9 +120,3 @@ New task: copy the pattern in `energy.py`, register it, then add the id to `run_
 - **SAL errors:** the model may have written invalid SAL; tweak `references/*.sal` or the task prompts.
 - **Very short WAV:** many metrics expect a full-length clip; you’ll see `duration_shortfall`.
 - **Gemini 429 / quota:** smaller batches, another model, or use Ollama locally.
-
----
-
-## License
-
-Add a `LICENSE` file when you publish if you need one.
