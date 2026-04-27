@@ -1,0 +1,30 @@
+; Few-shot for spectral trajectory tasks: timbre / brightness vs time (Nyquist SAL, course style).
+; Emulate structure from sal_energy_example.sal; adapt envelopes and carriers to the user prompt.
+
+; --- Brightness as mix of high vs low carrier (smooth centroid motion) ---
+define function bright-to-dark(dur)
+  begin
+    set w = pwl(0, 1.0, dur * 0.15, 0.85, dur * 0.85, 0.2, dur, 0.05)
+    set hi = hzosc(2200.0) ~ dur
+    set lo = hzosc(180.0) ~ dur
+    return sim(hi * w, lo * (1.0 - w))
+  end
+
+define function airy(dur)
+  begin
+    set env = pwl(0, 0, dur * 0.1, 0.15, dur * 0.9, 0.1, dur, 0.0)
+    set time = hzosc(1200.0) ~ dur
+    return time * env
+  end
+
+define function main()
+  begin
+    set dur = 12.0
+    return sim(bright-to-dark(dur), airy(dur) * 0.12)
+  end
+
+play main()
+
+; WRONG: local / let / bare =
+; WRONG: return play(main())
+; WRONG: last line not play main()

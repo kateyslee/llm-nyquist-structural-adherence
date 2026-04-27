@@ -1,0 +1,35 @@
+; Few-shot for LLM: Nyquist SAL in course style (NyquistIDE).
+; Self-contained synthesis here. Larger scores may use load "....lsp", s-read("....wav"),
+; and timed layers like sim(a, b) @ time — only when the prompt needs external audio.
+
+; --- Helpers use define function + begin; bind with set or begin with ... ---
+define function soft-rise(dur)
+  begin
+    set env = pwl(0, 0.01, 0.05, dur * 0.5, 0.6, dur * 0.85, 1.0, dur, 0.0)
+    set tone = hzosc(440.0) ~ dur
+    return tone * env
+  end
+
+define function airy-layer(dur)
+  begin with partial = hzosc(880.0) ~ dur
+    set env = pwl(0, 0, dur * 0.2, 0.12, dur * 0.8, 0.08, dur, 0.0)
+    return partial * env
+  end
+
+; --- Entry point: return the final mix; exactly one play at the end of the file ---
+define function main()
+  begin
+    set dur = 15.0
+    return sim(soft-rise(dur), airy-layer(dur))
+  end
+
+play main()
+
+; --- Optional keyword form (same as course): define function f(amp: 0.5) ... ---
+; --- Callback-style helpers use function name(...) ... end (e.g. spectral pipelines) ---
+;
+; WRONG: local x = 1
+; WRONG: let y = 2
+; WRONG: x = 3
+; WRONG: return play(main())
+; WRONG: last non-comment line is only main() with no play

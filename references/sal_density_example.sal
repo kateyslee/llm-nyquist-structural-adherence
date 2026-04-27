@@ -1,0 +1,26 @@
+; Few-shot: density increases over time (sparse -> dense).
+; For dense->sparse, use more pwl spikes in the first third of times and few at the end.
+
+define function layer(dur, freq, start_amp, end_amp)
+  begin
+    set env = pwl(0, start_amp, dur, end_amp)
+    set tone = hzosc(freq) ~ dur
+    return tone * env
+  end
+
+define function main()
+  begin
+    set dur = 12.0
+
+    ; one constant base layer
+    set l1 = layer(dur, 220.0, 0.5, 0.5)
+
+    ; additional layers fade in over time
+    set l2 = layer(dur, 330.0, 0.0, 0.35)
+    set l3 = layer(dur, 440.0, 0.0, 0.30)
+    set l4 = layer(dur, 660.0, 0.0, 0.25)
+
+    return sim(l1, l2, l3, l4)
+  end
+
+play main()

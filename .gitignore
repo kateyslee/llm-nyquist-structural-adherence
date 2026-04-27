@@ -1,0 +1,10 @@
+.env
+outputs/
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+*.wav
+*.ny.bak
+.DS_Store
